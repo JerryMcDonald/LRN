@@ -24,7 +24,7 @@ router.get('/login', passport.authenticate('google', {
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
 // res.send(req.user);761585
 
-  res.redirect('/profile');
+  res.redirect('/');
 });
 
 router.get('/exist', (req, res) => {
