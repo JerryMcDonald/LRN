@@ -47,7 +47,7 @@ function App() {
 
   // Retrieve all registered sessions
   useEffect(() => {
-    if(user) {
+    if (user) {
       axios.get(`event/${user.id}/student`)
         .then((response) => {
           const sortedRegSessions = response.data.sort(function(a, b) {
@@ -64,6 +64,8 @@ function App() {
 
   useEffect(() => {
     // may need to change to user documents
+  
+    
     axios.get('users/1/binder')
       .then(response => {
         setBinder(response.data);
@@ -91,12 +93,11 @@ function App() {
   if (user) {
     // Set up the Geocoding for transforming the zip to lat and lon
     // Geocode.setApiKey(process.env.GOOGLE_API_KEY);
-    Geocode.setApiKey('AIzaSyCVPR2bv5DCVKltpal636K0ei6zCIGb_68');
+    Geocode.setApiKey('AIzaSyAXFaDwiusxkZM2RX83GvVl0-vFIlx9VV0');
     Geocode.fromAddress(user.zip).then(
       response => {
         const { lat, lng } = response.results[0].geometry.location;
         user.location = { lat, lng, zipcode: user.zip };
-        console.log('User obj in App.jsx:', user);
       },
       error => {
         console.error('Error geocoding in App:', error);
@@ -111,7 +112,6 @@ function App() {
   const googleLogout = () => {
     axios.get('auth/logout')
       .then(res => {
-        console.log(res, 'in logout function');
         setUser(null);
         window.location.reload(false);
       })

@@ -31,7 +31,7 @@ Object.defineProperty(Array.prototype, 'chunk', {
   },
 });
 
-const UpcomingSessions = ({ user, sessions, regSessions, setNavbarSessionName }) => {
+const UpcomingSessions = ({ sessions, user, setNavbarSessionName, setEventId, regSessions }) => {
   const [upcomingSessions, setUpcomingSessions] = useState([]);
 
   useEffect(() => {
@@ -55,15 +55,22 @@ const UpcomingSessions = ({ user, sessions, regSessions, setNavbarSessionName })
   return (
     <div>
       <Typography gutterBottom variant="h4" component="h6" style={{ color: '#2d2e2e' }}><b>UPCOMING SESSIONS</b></Typography>
+      {upcomingSessions.length < 1
+        ? (
+          <Typography variant="h6" component="h6" style={{ color: '#a58e57' }}><b>Try registering for some sessions!</b></Typography>
+        )
+        : (
       <Slider {...settings} style={{ width: '600px', height: '300px', backgroundColor: '#e0e1e2' }}>
         {rows.map((sessionPage) => {
           return (
             <div>
-              <UpcomingTable sessionPage={sessionPage} user={user} setNavbarSessionName={setNavbarSessionName} />
+              <UpcomingTable sessionPage={sessionPage} user={user} setNavbarSessionName={setNavbarSessionName} setEventId={setEventId} />
             </div>
           );
         })}
       </Slider>
+        )
+      }
     </div>
   );
 };
