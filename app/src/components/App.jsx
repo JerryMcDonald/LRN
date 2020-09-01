@@ -57,7 +57,50 @@ function App() {
     }
   });
 
-
+  useEffect(() => {
+    axios.get('/auth/exist')
+      .then(res => {
+        if (res.data === 'no one here') {
+          console.log('I am not logged in');
+        } else {
+          console.log(res.data.username, 'I am logged in');
+          axios.get('users/')
+            .then(response => {
+              console.log(response.data, 'all the users');
+              return response.data;
+            }).then(allUsers => {
+              axios.get(`event/${res.data.id}/student`)
+                .then((response) => {
+                  console.log(response, 'response in app');
+                  const sortedRegSessions = response.data.sort((a, b) => {
+                    const aMDY = a.date.split('/').join('-');
+                    const bMDY = b.date.split('/').join('-');
+                    const aUnix = moment(`${aMDY} ${a.time}`, 'MM-DD-YY HH:mm a').unix();
+                    const bUnix = moment(`${bMDY} ${b.time}`, 'MM-DD-YY HH:mm a').unix();
+                    return aUnix - bUnix;
+                  });
+                  sortedRegSessions.forEach(session => {
+                    for (let i = 0; i < allUsers.length; i++) {
+                      if (session.users_id === allUsers[i].id) {
+                        session.namefirst = allUsers[i].namefirst;
+                        session.namelast = allUsers[i].namelast;
+                      }
+                    }
+                  });
+                  setRegSessions(sortedRegSessions);
+                });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+          // Retrieve all registered sessions
+          setUser(res.data);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
 
 
 
